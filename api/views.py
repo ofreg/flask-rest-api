@@ -9,7 +9,7 @@ books_bp = Blueprint("books", __name__)
 @books_bp.route("/", methods=["GET"])
 def get_books():
     return Response(
-        json.dumps(books, ensure_ascii=False),  
+        json.dumps(books, ensure_ascii=False, indent=4), 
         mimetype="application/json"
     )
 
