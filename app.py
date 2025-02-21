@@ -1,8 +1,6 @@
-from flask import Flask
-from api.views import books_bp
+from api import create_app
 
-app = Flask(__name__)
-app.register_blueprint(books_bp)
+app = create_app()
 
 if __name__ == "__main__":
     app.run(debug=True)
