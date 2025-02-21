@@ -1,20 +1,13 @@
 from flask import Blueprint, request, jsonify
 from marshmallow import Schema, fields, ValidationError
-
+from schemas import book_schema, book_list_schema
 books_bp = Blueprint("books", __name__)
 
 
 books = []
 
 
-class BookSchema(Schema):
-    id = fields.Int(required=True)
-    title = fields.Str(required=True)
-    author = fields.Str(required=True)
-    year = fields.Int(required=True)
 
-book_schema = BookSchema()
-book_list_schema = BookSchema(many=True)
 
 # 1. Отримання всіх книг
 @books_bp.route("/books", methods=["GET"])
