@@ -4,4 +4,4 @@ from api.views import router as books_router
 
 app = FastAPI()
 
-app.include_router(books_router, prefix="/api/v1")
+app.include_router(books_router, prefix="/api/v1/books")
