@@ -1,2 +1,12 @@
+
 venv/
-api/__pycache__
+.env
+
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+*.log
+*.pid

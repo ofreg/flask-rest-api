@@ -1,0 +1,23 @@
+
+//GET http://localhost:5000/api/v1/books/4
+
+//DELETE http://localhost:5000/api/v1/books/4
+
+
+GET http://localhost:5000/api/v1/books?page=1&per_page=4
+
+<!--
+POST http://localhost:5000/api/v1/books
+Content-Type: application/json
+
+{
+    
+    "title": "The Great Gatsby",
+    "description": "F. Scott Fitzgerald"
+}
+-->
+
+
+
+
+

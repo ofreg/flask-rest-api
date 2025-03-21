@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ofreg
+      POSTGRES_DB: library_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    depends_on:
+      - db
+    environment:
+      FLASK_APP: "app.py"
+      FLASK_ENV: "development"
+      DATABASE_URL: "postgresql://postgres:ofreg@db:5432/library_db"
+    ports:
+      - "5000:5000"
+
+volumes:
+  postgres_data:
