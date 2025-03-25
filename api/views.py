@@ -34,23 +34,27 @@ def get_book(book_id):
     return jsonify(book_schema.dump(book))
 
 
-
 @books_bp.route("/", methods=["GET"])
 def get_books():
-    page = request.args.get("page", 1, type=int)
+    cursor = request.args.get("cursor", None, type=int)
     per_page = request.args.get("per_page", 10, type=int)
 
-    
-    books = Book.query.paginate(page=page, per_page=per_page, error_out=False)
+    query = Book.query.order_by(Book.id)
+
+    if cursor:
+        query = query.filter(Book.id > cursor)
+
+    books = query.limit(per_page).all()
     
     book_schema = BookSchema(many=True)
 
+    next_cursor = books[-1].id if books else None
+
     return jsonify({
-        "books": book_schema.dump(books.items),
-        "total": books.total,
-        "page": books.page,
-        "per_page": books.per_page
+        "books": book_schema.dump(books),
+        "next_cursor": next_cursor
     })
+
 
 
 
