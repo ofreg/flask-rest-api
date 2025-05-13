@@ -1,4 +1,4 @@
-# Проста модель (можна підключити БД)
+
 books = []
 
 def get_all_books():
@@ -16,3 +16,10 @@ def add_book(title, author):
     }
     books.append(book)
     return book
+
+def delete_book_by_id(book_id):
+    book = get_book_by_id(book_id)
+    if book:
+        books.remove(book)
+        return True
+    return False

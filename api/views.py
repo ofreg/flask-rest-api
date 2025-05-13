@@ -2,7 +2,7 @@ from flask import request, jsonify
 from flask_restful import Resource
 from flasgger import swag_from
 
-from api.models import get_all_books, get_book_by_id, add_book
+from api.models import get_all_books, get_book_by_id, add_book, delete_book_by_id
 from api.schemas import book_model
 
 class Book(Resource):
@@ -58,4 +58,23 @@ class BookById(Resource):
         book = get_book_by_id(book_id)
         if book:
             return book
+        return {'message': 'Book not found'}, 404
+
+    @swag_from({
+        'parameters': [
+            {
+                'name': 'book_id',
+                'in': 'path',
+                'type': 'integer',
+                'required': True
+            }
+        ],
+        'responses': {
+            200: {'description': 'Книга видалена'},
+            404: {'description': 'Книга не знайдена'}
+        }
+    })
+    def delete(self, book_id):
+        if delete_book_by_id(book_id):
+            return {'message': 'Book deleted'}, 200
         return {'message': 'Book not found'}, 404

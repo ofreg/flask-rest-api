@@ -1,7 +1,11 @@
-POST http://127.0.0.1:5000/api/v1/books
+
+DELETE http://127.0.0.1:5000/api/v1/books/2
+Content-Type: application/json
+
+<!--POST http://127.0.0.1:5000/api/v1/books
 Content-Type: application/json
 
 {
-    "title": "Adaни через handler",
-    "author": "Автор через handler"
-}
+    "title": "Test title",
+    "author": "Test author"
+}-->
