@@ -1,11 +1,34 @@
-
-DELETE http://127.0.0.1:5000/api/v1/books/2
-Content-Type: application/json
-
-<!--POST http://127.0.0.1:5000/api/v1/books
+POST http://127.0.0.1:8000/api/v1/auth/refresh
 Content-Type: application/json
 
 {
-    "title": "Test title",
-    "author": "Test author"
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc0Nzg2MTE2Mn0.ObbB7SzmLVlw7tl9FVKjxEgCYMJzyQz8vpku9qlMvcU"
+}
+###
+//DELETE http://127.0.0.1:8000/api/v1/books/1
+//Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc0NzI1NzA2Nn0.n0B9R-Iz360Tu9FaUi-Q1vDzbbQVWmrTcgqUqzrzIt8
+
+
+#GET http://127.0.0.1:8000/api/v1/books
+#Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc0NzI1NzA2Nn0.n0B9R-Iz360Tu9FaUi-Q1vDzbbQVWmrTcgqUqzrzIt8
+<!--
+POST http://127.0.0.1:8000/api/v1/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "testpass"
+}
+-->
+
+### 
+<!--
+POST http://127.0.0.1:8000/api/v1/books
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImV4cCI6MTc0NzI1NzA2Nn0.n0B9R-Iz360Tu9FaUi-Q1vDzbbQVWmrTcgqUqzrzIt8
+Content-Type: application/json
+
+{
+    "title": "Test Title",
+    "author": "Test Author"
 }-->
+

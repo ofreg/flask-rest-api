@@ -1,80 +1,49 @@
-from flask import request, jsonify
-from flask_restful import Resource
-from flasgger import swag_from
+from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+from .models import books
+from .schemas import Book
+from jose import jwt, JWTError
+from fastapi.security import OAuth2PasswordBearer
 
-from api.models import get_all_books, get_book_by_id, add_book, delete_book_by_id
-from api.schemas import book_model
+SECRET_KEY = "secret"
+ALGORITHM = "HS256"
 
-class Book(Resource):
-    @swag_from({
-        'responses': {
-            200: {
-                'description': 'Отримати список книг',
-                'examples': {
-                    'application/json': [
-                        {'id': 1, 'title': 'Book 1', 'author': 'Author 1'}
-                    ]
-                }
-            }
-        }
-    })
-    def get(self):
-        return jsonify(get_all_books())
+books_router = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
-    @swag_from({
-        'parameters': [
-            {
-                'name': 'body',
-                'in': 'body',
-                'required': True,
-                'schema': book_model
-            }
-        ],
-        'responses': {
-            201: {'description': 'Книга додана'}
-        }
-    })
-    def post(self):
-        data = request.get_json()
-        book = add_book(data['title'], data['author'])
-        return book, 201
+def verify_token(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Invalid token payload")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+    return username
 
-class BookById(Resource):
-    @swag_from({
-        'parameters': [
-            {
-                'name': 'book_id',
-                'in': 'path',
-                'type': 'integer',
-                'required': True
-            }
-        ],
-        'responses': {
-            200: {'description': 'Книга знайдена'},
-            404: {'description': 'Книга не знайдена'}
-        }
-    })
-    def get(self, book_id):
-        book = get_book_by_id(book_id)
-        if book:
-            return book
-        return {'message': 'Book not found'}, 404
+@books_router.get("/", response_model=List[Book])
+async def get_books(username: str = Depends(verify_token)):
+    return books
 
-    @swag_from({
-        'parameters': [
-            {
-                'name': 'book_id',
-                'in': 'path',
-                'type': 'integer',
-                'required': True
-            }
-        ],
-        'responses': {
-            200: {'description': 'Книга видалена'},
-            404: {'description': 'Книга не знайдена'}
-        }
-    })
-    def delete(self, book_id):
-        if delete_book_by_id(book_id):
-            return {'message': 'Book deleted'}, 200
-        return {'message': 'Book not found'}, 404
+@books_router.get("/{book_id}", response_model=Book)
+async def get_book(book_id: int, username: str = Depends(verify_token)):
+    book = next((b for b in books if b["id"] == book_id), None)
+    if book is None:
+        raise HTTPException(status_code=404, detail="Book not found")
+    return book
+
+@books_router.post("/", response_model=Book)
+async def add_book(book: Book, username: str = Depends(verify_token)):
+    new_book = book.dict()
+    new_book["id"] = len(books) + 1
+    books.append(new_book)
+    return new_book
+
+@books_router.delete("/{book_id}", response_model=Book)
+async def delete_book(book_id: int, username: str = Depends(verify_token)):
+    global books
+    book = next((b for b in books if b["id"] == book_id), None)
+    if book is None:
+        raise HTTPException(status_code=404, detail="Book not found")
+    books = [b for b in books if b["id"] != book_id]
+    return book

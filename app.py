@@ -1,16 +1,9 @@
-from flask import Flask
-from flasgger import Swagger
-from api import api_bp
+from fastapi import FastAPI
+from api.views import books_router
+from api.auth import auth_router
 
-def create_app():
-    app = Flask(__name__)
-    Swagger(app)
+app = FastAPI()
 
-    
-    app.register_blueprint(api_bp, url_prefix='/api/v1')
+app.include_router(auth_router, prefix="/api/v1/auth")
 
-    return app
-
-if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True)
+app.include_router(books_router, prefix="/api/v1/books")

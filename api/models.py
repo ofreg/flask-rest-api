@@ -1,25 +1,14 @@
+from typing import List, Dict
 
-books = []
+books: List[Dict] = [
+    {"id": 1, "title": "Book 1", "author": "Author 1"},
+    {"id": 2, "title": "Book 2", "author": "Author 2"}
+]
 
-def get_all_books():
-    return books
 
-def get_book_by_id(book_id):
-    return next((book for book in books if book['id'] == book_id), None)
-
-def add_book(title, author):
-    book_id = len(books) + 1
-    book = {
-        'id': book_id,
-        'title': title,
-        'author': author
+users = {
+    "testuser": {
+        "username": "testuser",
+        "password": "testpass"  
     }
-    books.append(book)
-    return book
-
-def delete_book_by_id(book_id):
-    book = get_book_by_id(book_id)
-    if book:
-        books.remove(book)
-        return True
-    return False
+}
