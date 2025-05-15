@@ -7,8 +7,11 @@ lab4/
 lab5/
 lab6/
 lab7/
-docker-compose.yml
+lab8/
+
+Dockerfile
 dockerfile
 __pycache__/
 **/__pycache__/
 .pytest_cache
+tests/test_rate_limiter.py
