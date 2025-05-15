@@ -1,15 +1,82 @@
 openapi: 3.0.0
 info:
-  title: Mock API Example
+  title: Library Books Mock API
   version: '1.0'
+
 paths:
-  /api/v1/placeholder:
+  /books:
     get:
-      summary: Example placeholder endpoint
+      summary: Get all books
       responses:
         '200':
-          description: Successful mocked response
+          description: List of books
           content:
             application/json:
               example:
-                message: "Hello from mocked API!"
+                - id: 1
+                  title: "Війна і мир"
+                  author: "Лев Толстой"
+                - id: 2
+                  title: "1984"
+                  author: "Джордж Орвелл"
+
+    post:
+      summary: Create a new book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                author:
+                  type: string
+              required:
+                - title
+                - author
+      responses:
+        '201':
+          description: Book created
+          content:
+            application/json:
+              example:
+                id: 3
+                title: "Нова Книга"
+                author: "Автор Книги"
+
+  /books/{id}:
+    get:
+      summary: Get book by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the book
+      responses:
+        '200':
+          description: Book found
+          content:
+            application/json:
+              example:
+                id: 1
+                title: "Війна і мир"
+                author: "Лев Толстой"
+        '404':
+          description: Book not found
+
+    delete:
+      summary: Delete book by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID of the book
+      responses:
+        '204':
+          description: Book deleted
